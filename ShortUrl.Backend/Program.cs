@@ -37,7 +37,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.MapControllers();
 
-// app.MapGet("/", () => "Hello world!");
+app.MapGet("/", () => "Hello world!");
 
 app.Run();
 

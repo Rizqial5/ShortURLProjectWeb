@@ -5,7 +5,7 @@ using ShortUrl.Backend.Models;
 
 namespace ShortUrl.Backend.Controllers
 {
-    [Route("")]
+    [Route("shorten/")]
     [ApiController]
     public class ShorteningController : ControllerBase
     {
@@ -36,7 +36,7 @@ namespace ShortUrl.Backend.Controllers
             return Ok(selectedData);
         }
 
-        [HttpPost("Shorten")]
+        [HttpPost]
         public async Task<IActionResult> GetShortUrl([FromBody] UrlDTO urlDTO)
         {
             if(urlDTO == null ) return BadRequest("Please input full URL");
@@ -55,6 +55,20 @@ namespace ShortUrl.Backend.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetByShort), new {shortUrl = urlData.ShortCode}, urlData);
+        }
+
+        [HttpDelete("{shortUrl}")]
+        public async Task<IActionResult> DeleteAsync(string shortUrl)
+        {
+            var selectedData = await _context.ShortenDatas!.FirstOrDefaultAsync(u=> u.ShortCode == shortUrl);
+
+            if(selectedData == null) return NotFound();
+
+            _context.ShortenDatas!.Remove(selectedData);
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 
