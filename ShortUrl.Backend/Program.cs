@@ -2,6 +2,7 @@
 using Scalar.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using ShortUrl.Backend.Models;
+using ShortUrl.Backend.Controllers;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,9 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 // Add services to the container.
 builder.Services.AddSqlServer<ApplicationDbContext>(connectionString);
+builder.Services.AddControllers();
+builder.Services.AddScoped<ShorteningController>();
+builder.Services.AddHttpClient();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -30,9 +34,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
 app.MapControllers();
 
-app.MapGet("/", () => "Hello world!");
+// app.MapGet("/", () => "Hello world!");
 
 app.Run();
 
