@@ -5,7 +5,7 @@ using ShortUrl.Backend.Models;
 
 namespace ShortUrl.Backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("")]
     [ApiController]
     public class ShorteningController : ControllerBase
     {
