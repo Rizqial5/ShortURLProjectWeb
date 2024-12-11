@@ -12,14 +12,27 @@ namespace ShortUrl.Frontend.Services
             _httpClient = httpClient;
         }
 
-        public Task DeleteShortUrl(string shortUrl)
+        public async Task DeleteShortUrl(string shortUrl)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.DeleteAsync($"/{shortUrl}");
+            if(response!.StatusCode == HttpStatusCode.NotFound)
+            {
+                return;
+            }
+
+            response.EnsureSuccessStatusCode();
         }
 
-        public Task GenerateShortUrl(UrlDTO urlDTO)
+        public  async Task GenerateShortUrl(UrlDTO urlDTO)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.PostAsJsonAsync("/shorten",urlDTO);
+            
+            if(response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                return;
+            }
+
+            response.EnsureSuccessStatusCode();
         }
 
         public async Task<ShowUrl> GetByShortAsync(string shortUrl)

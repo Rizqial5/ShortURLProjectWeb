@@ -26,4 +26,32 @@ public class IndexModel : PageModel
         
         ShortenDatas = sessions;
     }
+
+    public async Task<IActionResult> OnPostGenerate(string inputUrl)
+    {
+
+        var shortUrlData = new UrlDTO
+        {
+            UrlText = inputUrl
+        };
+
+        if(!ValidateUrl(shortUrlData)) return BadRequest("Please input valid URL");
+
+        await _apiClient.GenerateShortUrl(shortUrlData);
+
+        var sessions = await _apiClient.GetShortenDatasAsync();
+
+        
+        ShortenDatas = sessions;
+
+        return Page();
+        
+    }
+
+    private static bool ValidateUrl(UrlDTO urlDTO)
+    {
+        var success = Uri.IsWellFormedUriString(urlDTO.UrlText, UriKind.Absolute);
+
+        return success;
+    }
 }
