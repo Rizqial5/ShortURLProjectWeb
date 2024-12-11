@@ -68,9 +68,22 @@ namespace ShortUrl.Frontend.Services
             throw new NotImplementedException();
         }
 
-        public Task UpdateShortUrl(string shortUrl, string updatedUrl)
+        public async Task UpdateShortUrl(string shortUrl, string updatedUrl)
         {
-            throw new NotImplementedException();
+            
+            var newUpdatedUrl = new UrlDTO
+            {
+                UrlText = updatedUrl
+            };
+
+            var response = await _httpClient.PutAsJsonAsync($"/{shortUrl}",newUpdatedUrl);
+
+            if(response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                return;
+            }
+
+            response.EnsureSuccessStatusCode();
         }
     }
 }

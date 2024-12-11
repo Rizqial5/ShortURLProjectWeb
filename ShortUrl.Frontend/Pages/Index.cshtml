@@ -31,6 +31,7 @@
                     <th scope="col">Created At</th>
                     <th scope="col">Updated At</th>
                     <th scope="col"></th>
+                    <th scope="col"></th>
                     
                 </tr>
             </thead>
@@ -49,7 +50,9 @@
                                 <input type="hidden" name="shortCode" value="@data.ShortCode"/>
                                 <button type="submit" class="btn btn-danger" > Delete </button>
                             </form>
-                            
+                        </td>
+                        <td>
+                            <a asp-page="Update" asp-route-shortCode="@data.ShortCode" class=" btn btn-primary">Edit</a>
                         </td>
                     </tr>
                 }
