@@ -33,7 +33,7 @@
                         <td>@data.CreatedAt</td>
                         <td>@data.UpdatedAt</td>
                         <td>
-                            <a asp-page="/Redirect" asp-route-redirectString="@data.ShortCode">test</a>
+                            <a asp-page="/Redirect" asp-route-redirectString="@data.ShortCode">@(Request.Host+"/"+data.ShortCode)</a>
                         </td>
                     </tr>
                 }
