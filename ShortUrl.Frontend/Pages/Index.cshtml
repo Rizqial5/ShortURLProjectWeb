@@ -4,14 +4,13 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="border rounded-2 w-50 pb-2" >
-     
+<div class="border rounded-2 w-50 pb-3 bg-white shadow-lg" >
     <form method="post" asp-page-handler="Generate">
-        <div class="ms-2 pb-3">
-            <label class="p-2 font-monospace fw-normal text-body">Shorten Long Url</label>
-            <input type="url" class="form-control w-75 ms-2" id="inputUrl" name="inputUrl" placeholder="www.example.com">
-        </div>
-        <button type="submit" class="btn btn-primary ms-3">Submit</button>
+        <div class="ms-2 pt-4 pb-2 ps-4">
+            <label class="pb-2 font-monospace fw-normal text-body"><h5>Shorten Long Url</h5></label>
+            <input type="url" class="form-control w-75 " id="inputUrl" name="inputUrl" placeholder="www.example.com">
+            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        </div> 
     </form>
 </div>
 
@@ -28,8 +27,6 @@
                 <tr>
                     <th scope="col"> Url Long</th>
                     <th scope="col">ShortLink</th>
-                    <th scope="col">Created At</th>
-                    <th scope="col">Updated At</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col"></th>
@@ -44,8 +41,6 @@
                         <td>
                             <a asp-page="/Redirect" asp-route-redirectString="@data.ShortCode">@(Request.Host+"/"+data.ShortCode)</a>
                         </td>
-                        <td>@data.CreatedAt</td>
-                        <td>@data.UpdatedAt</td>
                         <td>
                             <a asp-page="Stats" asp-route-shortCode="@data.ShortCode" class=" btn btn-primary">Stats</a>
                         </td>
