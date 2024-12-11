@@ -42,11 +42,41 @@ namespace ShortUrl.Backend.Controllers
         [HttpPost("shorten")]
         public async Task<IActionResult> GetShortUrl([FromBody] UrlDTO urlDTO)
         {
-            if(urlDTO == null ) return BadRequest("Please input full URL");
 
+            if(!ValidateUrl(urlDTO)) return BadRequest("Please input valid URL");
+
+            
+
+            var shortUrl = ShorteningAlgorithm(urlDTO.UrlText!);
+
+            var urlData = new ShortenData
+            {
+                Url = urlDTO.UrlText,
+                ShortCode = shortUrl,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+
+            };
+
+            _context.ShortenDatas!.Add(urlData);
+
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetByShort), new { shortUrl = urlData.ShortCode }, urlData);
+        }
+
+        private static bool ValidateUrl(UrlDTO urlDTO)
+        {
+            var success = Uri.IsWellFormedUriString(urlDTO.UrlText, UriKind.Absolute);
+
+            return success;
+        }
+
+        private string ShorteningAlgorithm(string urlInput)
+        {
             MD5 md5Hasher = MD5.Create();
 
-            byte[] urlHash = md5Hasher.ComputeHash(Encoding.Default.GetBytes(urlDTO.UrlText));
+            byte[] urlHash = md5Hasher.ComputeHash(Encoding.Default.GetBytes(urlInput));
 
             StringBuilder stringBuilder = new StringBuilder();
             var base62Converter = new Base62Converter();
@@ -62,26 +92,12 @@ namespace ShortUrl.Backend.Controllers
 
             var shortUrl = new StringBuilder();
 
-            for (var i = 0; i <= 6 ; i++)
+            for (var i = 0; i <= 6; i++)
             {
                 shortUrl.Append(encodeUrl[i]);
             }
 
-            var urlData = new ShortenData
-            {
-                Url = urlDTO.UrlText,
-                ShortCode = shortUrl.ToString(),
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
-                
-            };
-
-            _context.ShortenDatas!.Add(urlData);
-
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetByShort), new {shortUrl = urlData.ShortCode}, urlData);
-            
+            return shortUrl.ToString();
         }
 
         [HttpDelete("{shortUrl}")]
