@@ -1,9 +1,17 @@
+using System.Net;
 using ShortUrl.Backend.Models;
 
 namespace ShortUrl.Frontend.Services
 {
     public class ApiClient : IApiClient
     {
+        private readonly HttpClient _httpClient;
+
+        public ApiClient(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
         public Task DeleteShortUrl(string shortUrl)
         {
             throw new NotImplementedException();
@@ -19,12 +27,21 @@ namespace ShortUrl.Frontend.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<ShortenData>> GetShortenDatasAsync()
+        public async Task<IEnumerable<ShortenData>> GetShortenDatasAsync()
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.GetAsync($"/lists");
+
+            if(response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadFromJsonAsync<IEnumerable<ShortenData>>();
         }
 
-        public Task<ShortenData> GetShortenStatsAsync(string shortUrl)
+        public async Task<ShortenData> GetShortenStatsAsync(string shortUrl)
         {
             throw new NotImplementedException();
         }
