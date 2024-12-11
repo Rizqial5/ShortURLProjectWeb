@@ -32,6 +32,22 @@ namespace ShortUrl.Backend.Controllers
         [HttpGet("{shortUrl}")]
         public async Task<ActionResult> GetByShort(string shortUrl)
         {
+            var selectedData = await _context.ShortenDatas!.FirstOrDefaultAsync(u => u.ShortCode == shortUrl);
+
+            if (selectedData == null) return NotFound("Url not found");
+            ShowUrl showUrl = CreateShowUrlData(selectedData);
+
+            selectedData.AccessCount += 1;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(showUrl);
+        }
+
+
+        [HttpGet("{shortUrl}/stats")]
+        public async Task<ActionResult> GetShortStats(string shortUrl)
+        {
             var selectedData = await _context.ShortenDatas!.FirstOrDefaultAsync(u=> u.ShortCode == shortUrl);
 
             if(selectedData == null) return NotFound("Url not found");
@@ -45,7 +61,6 @@ namespace ShortUrl.Backend.Controllers
 
             if(!ValidateUrl(urlDTO)) return BadRequest("Please input valid URL");
 
-            
 
             var shortUrl = ShorteningAlgorithm(urlDTO.UrlText!);
 
@@ -54,7 +69,8 @@ namespace ShortUrl.Backend.Controllers
                 Url = urlDTO.UrlText,
                 ShortCode = shortUrl,
                 CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
+                UpdatedAt = DateTime.Now,
+                AccessCount = 0
 
             };
 
@@ -129,12 +145,38 @@ namespace ShortUrl.Backend.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(selectedData);
+            var showUrl = CreateShowUrlData(selectedData);
+
+            
+
+            return Ok(showUrl);
+        }
+
+        private static ShowUrl CreateShowUrlData(ShortenData? selectedData)
+        {
+            return new ShowUrl
+            {
+                Id = selectedData.Id,
+                Url = selectedData.Url,
+                ShortCode = selectedData.ShortCode,
+                CreatedAt = selectedData.CreatedAt,
+                UpdatedAt = selectedData.UpdatedAt
+
+            };
         }
     }
 
     public class UrlDTO
     {
         public string? UrlText {get;set;}
+    }
+
+    public class ShowUrl
+    {
+        public int Id {get;set;}
+        public string? Url{get; set;}
+        public string? ShortCode{get;set;}
+        public DateTime CreatedAt{get;set;}
+        public DateTime UpdatedAt{get;set;}
     }
 }
