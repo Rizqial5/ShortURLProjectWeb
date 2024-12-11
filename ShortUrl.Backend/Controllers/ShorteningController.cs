@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography; 
 using Microsoft.EntityFrameworkCore;
 using ShortUrl.Backend.Models;
+using System.Text;
+using Base62;
 
 namespace ShortUrl.Backend.Controllers
 {
-    [Route("shorten/")]
+    [Route("")]
     [ApiController]
     public class ShorteningController : ControllerBase
     {
@@ -17,7 +20,7 @@ namespace ShortUrl.Backend.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("lists")]
         public async Task<ActionResult> GetAllAsync()
         {
             var datas = await _context.ShortenDatas!.ToListAsync();
@@ -36,15 +39,38 @@ namespace ShortUrl.Backend.Controllers
             return Ok(selectedData);
         }
 
-        [HttpPost]
+        [HttpPost("shorten")]
         public async Task<IActionResult> GetShortUrl([FromBody] UrlDTO urlDTO)
         {
             if(urlDTO == null ) return BadRequest("Please input full URL");
 
+            MD5 md5Hasher = MD5.Create();
+
+            byte[] urlHash = md5Hasher.ComputeHash(Encoding.Default.GetBytes(urlDTO.UrlText));
+
+            StringBuilder stringBuilder = new StringBuilder();
+            var base62Converter = new Base62Converter();
+
+            for (var i = 0; i <= 2; i++)
+            {
+                stringBuilder.Append(urlHash[i].ToString("x2"));
+            }
+
+            var urlDecimal = Int64.Parse(stringBuilder.ToString(), System.Globalization.NumberStyles.HexNumber);
+
+            var encodeUrl = base62Converter.Encode(urlDecimal.ToString());
+
+            var shortUrl = new StringBuilder();
+
+            for (var i = 0; i <= 6 ; i++)
+            {
+                shortUrl.Append(encodeUrl[i]);
+            }
+
             var urlData = new ShortenData
             {
                 Url = urlDTO.UrlText,
-                ShortCode = "Short",
+                ShortCode = shortUrl.ToString(),
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
                 
@@ -55,6 +81,7 @@ namespace ShortUrl.Backend.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetByShort), new {shortUrl = urlData.ShortCode}, urlData);
+            
         }
 
         [HttpDelete("{shortUrl}")]
