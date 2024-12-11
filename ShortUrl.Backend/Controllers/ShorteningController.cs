@@ -113,6 +113,24 @@ namespace ShortUrl.Backend.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("{shortUrl}")]
+        public async Task<IActionResult> UpdateShortUrl(string shortUrl, [FromBody] UrlDTO inputUrl)
+        {
+
+            if(!ValidateUrl(inputUrl)) return BadRequest("Please input valid Url");
+
+            var selectedData = await _context.ShortenDatas!.FirstOrDefaultAsync(u=> u.ShortCode == shortUrl);
+
+            if(selectedData == null) return NotFound();
+
+            selectedData.Url = inputUrl.UrlText;
+            selectedData.UpdatedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(selectedData);
+        }
     }
 
     public class UrlDTO
