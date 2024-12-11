@@ -4,15 +4,13 @@
     ViewData["Title"] = "Update";
 }
 
-<h1>@ViewData["Title"]</h1>
 
-<div class="border rounded-2 w-50 pb-2" >
-     
+<div class="border rounded-2 w-50 pb-3 bg-white shadow-lg" >
     <form method="post" >
-        <div class="ms-2 pb-3">
-            <label class="p-2 font-monospace fw-normal text-body">New Long Url</label>
-            <input type="url" class="form-control w-75 ms-2" id="inputUrl" name="inputUrl" placeholder="www.example.com">
-        </div>
-        <button type="submit" class="btn btn-primary ms-3">Submit</button>
+        <div class="ms-2 pt-4 pb-2 ps-4">
+            <label class="pb-2 font-monospace fw-normal text-body"><h5>New Long Url</h5></label>
+            <input type="url" class="form-control w-75 " id="inputUrl" name="inputUrl" placeholder="www.example.com">
+            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        </div> 
     </form>
 </div>
