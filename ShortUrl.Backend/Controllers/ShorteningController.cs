@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography; 
+using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using ShortUrl.Backend.Models;
 using System.Text;
@@ -164,19 +164,5 @@ namespace ShortUrl.Backend.Controllers
 
             };
         }
-    }
-
-    public class UrlDTO
-    {
-        public string? UrlText {get;set;}
-    }
-
-    public class ShowUrl
-    {
-        public int Id {get;set;}
-        public string? Url{get; set;}
-        public string? ShortCode{get;set;}
-        public DateTime CreatedAt{get;set;}
-        public DateTime UpdatedAt{get;set;}
     }
 }
