@@ -19,6 +19,8 @@
                     <th scope="col"> Short Code </th>
                     <th scope="col">Created At</th>
                     <th scope="col">Updated At</th>
+                    <th scope="col">Updated At</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +32,9 @@
                         <td>@data.ShortCode</td>
                         <td>@data.CreatedAt</td>
                         <td>@data.UpdatedAt</td>
+                        <td>
+                            <a asp-page="/Redirect" asp-route-redirectString="@data.ShortCode">test</a>
+                        </td>
                     </tr>
                 }
             </tbody>

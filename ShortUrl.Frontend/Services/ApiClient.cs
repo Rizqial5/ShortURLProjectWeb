@@ -22,9 +22,15 @@ namespace ShortUrl.Frontend.Services
             throw new NotImplementedException();
         }
 
-        public Task<ShowUrl> GetByShortAsync(string shortUrl)
+        public async Task<ShowUrl> GetByShortAsync(string shortUrl)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.GetAsync($"/{shortUrl}");
+            if(response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<ShowUrl>();
         }
 
         public async Task<IEnumerable<ShortenData>> GetShortenDatasAsync()

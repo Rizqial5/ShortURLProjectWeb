@@ -11,6 +11,7 @@ public class IndexModel : PageModel
     private readonly IApiClient _apiClient;
 
     [BindProperty] public IEnumerable<ShortenData> ShortenDatas {set;get;}
+    [BindProperty] public ShowUrl ShowShortUrl {set;get;}
 
     public IndexModel(ILogger<IndexModel> logger, IApiClient apiClient)
     {
@@ -22,6 +23,7 @@ public class IndexModel : PageModel
     {
         var sessions = await _apiClient.GetShortenDatasAsync();
 
+        
         ShortenDatas = sessions;
     }
 }
