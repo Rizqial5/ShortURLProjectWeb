@@ -48,6 +48,18 @@ public class IndexModel : PageModel
         
     }
 
+    public async Task<IActionResult> OnPostDelete(string shortCode)
+    {
+        await _apiClient.DeleteShortUrl(shortCode);
+
+        var sessions = await _apiClient.GetShortenDatasAsync();
+
+        
+        ShortenDatas = sessions;
+
+        return Page();
+    }
+
     private static bool ValidateUrl(UrlDTO urlDTO)
     {
         var success = Uri.IsWellFormedUriString(urlDTO.UrlText, UriKind.Absolute);
