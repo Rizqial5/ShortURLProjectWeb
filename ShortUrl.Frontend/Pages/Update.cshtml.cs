@@ -13,10 +13,10 @@ namespace ShortUrl.Frontend.Pages
     public class Update : PageModel
     {
         private readonly ILogger<Update> _logger;
-        private readonly IApiClient _apiClient;
+        private readonly IApiClient? _apiClient;
 
         [BindProperty]
-        public ShowUrl SelectedUrl {get;set;}
+        public ShowUrl? SelectedUrl {get;set;}
 
         public Update(ILogger<Update> logger, IApiClient apiClient)
         {
