@@ -10,8 +10,8 @@ public class IndexModel : PageModel
     private readonly ILogger<IndexModel> _logger;
     private readonly IApiClient _apiClient;
 
-    [BindProperty] public IEnumerable<ShortenData> ShortenDatas {set;get;}
-    [BindProperty] public ShowUrl ShowShortUrl {set;get;}
+    [BindProperty] public IEnumerable<ShortenData>? ShortenDatas {set;get;}
+    [BindProperty] public ShowUrl? ShowShortUrl {set;get;}
 
     public IndexModel(ILogger<IndexModel> logger, IApiClient apiClient)
     {

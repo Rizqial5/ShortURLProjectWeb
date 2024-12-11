@@ -25,29 +25,32 @@ namespace ShortUrl.Frontend.Services
         public async Task<ShowUrl> GetByShortAsync(string shortUrl)
         {
             var response = await _httpClient.GetAsync($"/{shortUrl}");
-            if(response.StatusCode == HttpStatusCode.NotFound)
+            if(response!.StatusCode == HttpStatusCode.NotFound)
             {
-                return null;
+                return null!;
             }
 
-            return await response.Content.ReadFromJsonAsync<ShowUrl>();
+            var contentReturn = await response.Content.ReadFromJsonAsync<ShowUrl>();
+            return contentReturn!;
         }
 
         public async Task<IEnumerable<ShortenData>> GetShortenDatasAsync()
         {
-            var response = await _httpClient.GetAsync($"/lists");
+            var response = await _httpClient!.GetAsync($"/lists");
 
             if(response.StatusCode == HttpStatusCode.NotFound)
             {
-                return null;
+                return null!;
             }
 
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<IEnumerable<ShortenData>>();
+            var contentReturn = await response!.Content!.ReadFromJsonAsync<IEnumerable<ShortenData>>();
+
+            return contentReturn!;
         }
 
-        public async Task<ShortenData> GetShortenStatsAsync(string shortUrl)
+        public  Task<ShortenData> GetShortenStatsAsync(string shortUrl)
         {
             throw new NotImplementedException();
         }

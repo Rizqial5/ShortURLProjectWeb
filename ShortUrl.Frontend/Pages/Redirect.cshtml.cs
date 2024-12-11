@@ -15,8 +15,8 @@ namespace ShortUrl.Frontend.Pages
         private readonly ILogger<RedirectModel> _logger;
         private readonly IApiClient _apiClient;
 
-        [BindProperty] public ShowUrl ShowUrl{get;set;}
-        [BindProperty(SupportsGet = true)] public string redirectString{get;set;}
+        [BindProperty] public ShowUrl? ShowUrl{get;set;}
+        [BindProperty(SupportsGet = true)] public string? redirectString{get;set;}
         
 
         public RedirectModel(ILogger<RedirectModel> logger, IApiClient apiClient)
@@ -35,7 +35,7 @@ namespace ShortUrl.Frontend.Pages
 
             
 
-            return Redirect(ShowUrl.Url);
+            return Redirect(ShowUrl.Url!);
         }
     }
 }
