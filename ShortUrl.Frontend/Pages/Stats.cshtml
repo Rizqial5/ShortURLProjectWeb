@@ -1,0 +1,25 @@
+@page
+@model ShortUrl.Frontend.Pages.Stats
+@{
+    ViewData["Title"] = "Stats";
+}
+
+<h2>Short link stat</h2>
+
+<div class="border rounded-2 w-50 pb-2 pe-4" >
+    <dl class="row pt-2 ps-2">
+        <dt class="col-sm-3 pt-2">Url :</dt>
+        <dd  class="col-sm-9 border p-2">@Model!.ShortenData!.Url</dd>
+        <dt class="col-sm-3 pt-2">Short url :</dt>
+        <dd  class="col-sm-9  border p-2">
+            <a asp-page="/Redirect" asp-route-redirectString="@Model.ShortenData.ShortCode">
+                @(Request.Host+"/"+Model.ShortenData.ShortCode)
+            </a></dd>
+        <dt class="col-sm-3 pt-2">Created at:</dt>
+        <dd  class="col-sm-9  border p-2">@Model.ShortenData.CreatedAt</dd>
+        <dt class="col-sm-3 pt-2">Updated at :</dt>
+        <dd  class="col-sm-9  border p-2">@Model.ShortenData.UpdatedAt</dd>
+        <dt class="col-sm-3 pt-2">Access Count :</dt>
+        <dd  class="col-sm-9  border p-2">@Model.ShortenData.AccessCount</dd>
+    </dl>
+</div>

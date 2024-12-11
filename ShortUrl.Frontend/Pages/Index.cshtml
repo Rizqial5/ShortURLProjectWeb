@@ -32,6 +32,7 @@
                     <th scope="col">Updated At</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
+                    <th scope="col"></th>
                     
                 </tr>
             </thead>
@@ -45,6 +46,9 @@
                         </td>
                         <td>@data.CreatedAt</td>
                         <td>@data.UpdatedAt</td>
+                        <td>
+                            <a asp-page="Stats" asp-route-shortCode="@data.ShortCode" class=" btn btn-primary">Stats</a>
+                        </td>
                         <td>
                             <form method="post" asp-page-handler="Delete">
                                 <input type="hidden" name="shortCode" value="@data.ShortCode"/>

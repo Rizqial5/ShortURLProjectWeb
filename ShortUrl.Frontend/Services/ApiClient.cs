@@ -63,9 +63,18 @@ namespace ShortUrl.Frontend.Services
             return contentReturn!;
         }
 
-        public  Task<ShortenData> GetShortenStatsAsync(string shortUrl)
+        public  async Task<ShortenData> GetShortenStatsAsync(string shortUrl)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.GetAsync($"{shortUrl}/stats");
+
+            if(response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null!;
+            }
+
+            var content = await response!.Content!.ReadFromJsonAsync<ShortenData>();
+
+            return content!;
         }
 
         public async Task UpdateShortUrl(string shortUrl, string updatedUrl)
