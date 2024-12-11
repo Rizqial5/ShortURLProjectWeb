@@ -156,7 +156,7 @@ namespace ShortUrl.Backend.Controllers
         {
             return new ShowUrl
             {
-                Id = selectedData.Id,
+                Id = selectedData!.Id,
                 Url = selectedData.Url,
                 ShortCode = selectedData.ShortCode,
                 CreatedAt = selectedData.CreatedAt,
