@@ -1,7 +1,15 @@
+using ShortUrl.Frontend.Services;
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("FrontEnd.appsettings.json", optional: true, reloadOnChange: true)
+                     .AddJsonFile($"FrontEnd.appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddHttpClient<IApiClient, ApiClient>(client=>
+{
+    client.BaseAddress = new Uri(builder.Configuration["serviceUrl"]!);
+});
 
 var app = builder.Build();
 
